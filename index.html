@@ -1,58 +1,142 @@
-<script>
-let miPais = null;
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mini Victoria</title>
 
-function elegirPais(pais) {
-    miPais = pais;
-
-    document.getElementById("menu").style.display = "none";
-
-    let elemento = document.getElementById(pais);
-    if (elemento) {
-        elemento.style.fill = "blue";
-    }
-
-    console.log("Elegiste:", pais);
+<style>
+body {
+    margin: 0;
+    background: #111;
+    font-family: Arial;
 }
-</script>
-<div id="menu">
-    <h2>Choose your country</h2>
 
-    <button onclick="elegirPais('AL')">Albania</button>
-    <button onclick="elegirPais('AT')">Austria</button>
-    <button onclick="elegirPais('BY')">Belarus</button>
-    <button onclick="elegirPais('BE')">Belgium</button>
-    <button onclick="elegirPais('BA')">Bosnia</button>
-    <button onclick="elegirPais('BG')">Bulgaria</button>
-    <button onclick="elegirPais('HR')">Croatia</button>
-    <button onclick="elegirPais('CZ')">Czechia</button>
-    <button onclick="elegirPais('DK')">Denmark</button>
-    <button onclick="elegirPais('EE')">Estonia</button>
-    <button onclick="elegirPais('FI')">Finland</button>
-    <button onclick="elegirPais('FR')">France</button>
-    <button onclick="elegirPais('DE')">Germany</button>
-    <button onclick="elegirPais('GR')">Greece</button>
-    <button onclick="elegirPais('HU')">Hungary</button>
-    <button onclick="elegirPais('IS')">Iceland</button>
-    <button onclick="elegirPais('IE')">Ireland</button>
-    <button onclick="elegirPais('IT')">Italy</button>
-    <button onclick="elegirPais('LV')">Latvia</button>
-    <button onclick="elegirPais('LT')">Lithuania</button>
-    <button onclick="elegirPais('MD')">Moldova</button>
-    <button onclick="elegirPais('ME')">Montenegro</button>
-    <button onclick="elegirPais('NL')">Netherlands</button>
-    <button onclick="elegirPais('MK')">North Macedonia</button>
-    <button onclick="elegirPais('NO')">Norway</button>
-    <button onclick="elegirPais('PL')">Poland</button>
-    <button onclick="elegirPais('PT')">Portugal</button>
-    <button onclick="elegirPais('RO')">Romania</button>
-    <button onclick="elegirPais('RS')">Serbia</button>
-    <button onclick="elegirPais('SK')">Slovakia</button>
-    <button onclick="elegirPais('SI')">Slovenia</button>
-    <button onclick="elegirPais('ES')">Spain</button>
-    <button onclick="elegirPais('SE')">Sweden</button>
-    <button onclick="elegirPais('CH')">Switzerland</button>
-    <button onclick="elegirPais('TR')">Turkey</button>
-    <button onclick="elegirPais('UA')">Ukraine</button>
-    <button onclick="elegirPais('GB')">United Kingdom</button>
+/* PANTALLA INICIO */
+#inicio {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* BOTON START */
+#startBtn {
+    width: 320px;
+    height: 120px;
+    cursor: pointer;
+}
+
+/* CONTENEDOR JUEGO */
+#juego {
+    display: none;
+}
+
+/* MAPA */
+#mapa {
+    width: 100vw;
+    height: 100vh;
+    background: #222;
+}
+
+/* MENU PAISES */
+#menu {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #222;
+    color: white;
+    padding: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* DIPLOMACIA (placeholder) */
+#diplomacia {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #333;
+    color: white;
+    padding: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA INICIO -->
+<div id="inicio">
+    <img src="start.png" id="startBtn" onclick="iniciarJuego()">
+</div>
+
+<!-- JUEGO -->
+<div id="juego">
+
+    <!-- MAPA SVG -->
+    <object id="mapa" type="image/svg+xml" data="europa.svg"></object>
+
+    <!-- MENU -->
+    <div id="menu">
+        <h3>Choose Country</h3>
+
+        <button onclick="elegirPais('ES')">Spain</button>
+        <button onclick="elegirPais('FR')">France</button>
+        <button onclick="elegirPais('DE')">Germany</button>
+        <button onclick="elegirPais('IT')">Italy</button>
+        <button onclick="elegirPais('PL')">Poland</button>
+        <button onclick="elegirPais('GB')">UK</button>
+        <button onclick="elegirPais('UA')">Ukraine</button>
+        <button onclick="elegirPais('TR')">Turkey</button>
+
+    </div>
+
+    <!-- DIPLOMACIA -->
+    <div id="diplomacia">
+        Diplomacy (coming soon)
+    </div>
 
 </div>
+
+<script>
+let miPais = null;
+let svgDoc = null;
+
+// INICIAR JUEGO
+function iniciarJuego() {
+    document.getElementById("inicio").style.display = "none";
+    document.getElementById("juego").style.display = "block";
+}
+
+// CUANDO CARGA EL SVG
+document.getElementById("mapa").addEventListener("load", function() {
+    svgDoc = this.contentDocument;
+
+    // activar clicks en países
+    const paises = svgDoc.querySelectorAll("path");
+
+    paises.forEach(pais => {
+        pais.addEventListener("click", function() {
+            if (miPais) {
+                this.style.fill = "red"; // conquistar
+            }
+        });
+    });
+});
+
+// ELEGIR PAIS
+function elegirPais(id) {
+    miPais = id;
+
+    const pais = svgDoc.getElementById(id);
+    if (pais) {
+        pais.style.fill = "blue";
+    }
+
+    console.log("Elegiste:", id);
+}
+</script>
+
+</body>
+</html>
