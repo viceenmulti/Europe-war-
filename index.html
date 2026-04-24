@@ -1,65 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Mini Victoria</title>
-
-<style>
-body {
-    margin: 0;
-    background: #111;
-}
-
-svg {
-    width: 100vw;
-    height: 100vh;
-}
-
-path {
-    fill: gray;
-    stroke: black;
-    stroke-width: 2;
-    cursor: pointer;
-}
-
-path:hover {
-    fill: orange;
-}
-</style>
-</head>
-
-<body>
-
-<svg viewBox="0 0 800 600">
-
-    <!-- España -->
-    <path d="M150 400 L250 400 L240 470 L140 470 Z"
-          onclick="clickPais('España', this)" />
-
-    <!-- Francia -->
-    <path d="M260 320 L360 320 L350 400 L250 400 Z"
-          onclick="clickPais('Francia', this)" />
-
-    <!-- Alemania -->
-    <path d="M380 250 L460 250 L450 330 L370 330 Z"
-          onclick="clickPais('Alemania', this)" />
-
-    <!-- Italia -->
-    <path d="M420 350 L460 350 L480 500 L440 500 Z"
-          onclick="clickPais('Italia', this)" />
-
-    <!-- Reino Unido -->
-    <path d="M200 200 L260 200 L250 280 L190 280 Z"
-          onclick="clickPais('Reino Unido', this)" />
-
-</svg>
-
 <script>
-function clickPais(nombre, elemento) {
-    elemento.style.fill = "red";
-    console.log("Seleccionaste " + nombre);
+let miPais = null;
+
+function elegirPais(pais) {
+    miPais = pais;
+
+    document.getElementById("menu").style.display = "none";
+
+    let elemento = document.getElementById(pais);
+    if (elemento) {
+        elemento.style.fill = "blue";
+    }
+
+    console.log("Elegiste:", pais);
 }
 </script>
+<div id="menu">
+    <h2>Choose your country</h2>
 
-</body>
-</html>
+    <button onclick="elegirPais('AL')">Albania</button>
+    <button onclick="elegirPais('AT')">Austria</button>
+    <button onclick="elegirPais('BY')">Belarus</button>
+    <button onclick="elegirPais('BE')">Belgium</button>
+    <button onclick="elegirPais('BA')">Bosnia</button>
+    <button onclick="elegirPais('BG')">Bulgaria</button>
+    <button onclick="elegirPais('HR')">Croatia</button>
+    <button onclick="elegirPais('CZ')">Czechia</button>
+    <button onclick="elegirPais('DK')">Denmark</button>
+    <button onclick="elegirPais('EE')">Estonia</button>
+    <button onclick="elegirPais('FI')">Finland</button>
+    <button onclick="elegirPais('FR')">France</button>
+    <button onclick="elegirPais('DE')">Germany</button>
+    <button onclick="elegirPais('GR')">Greece</button>
+    <button onclick="elegirPais('HU')">Hungary</button>
+    <button onclick="elegirPais('IS')">Iceland</button>
+    <button onclick="elegirPais('IE')">Ireland</button>
+    <button onclick="elegirPais('IT')">Italy</button>
+    <button onclick="elegirPais('LV')">Latvia</button>
+    <button onclick="elegirPais('LT')">Lithuania</button>
+    <button onclick="elegirPais('MD')">Moldova</button>
+    <button onclick="elegirPais('ME')">Montenegro</button>
+    <button onclick="elegirPais('NL')">Netherlands</button>
+    <button onclick="elegirPais('MK')">North Macedonia</button>
+    <button onclick="elegirPais('NO')">Norway</button>
+    <button onclick="elegirPais('PL')">Poland</button>
+    <button onclick="elegirPais('PT')">Portugal</button>
+    <button onclick="elegirPais('RO')">Romania</button>
+    <button onclick="elegirPais('RS')">Serbia</button>
+    <button onclick="elegirPais('SK')">Slovakia</button>
+    <button onclick="elegirPais('SI')">Slovenia</button>
+    <button onclick="elegirPais('ES')">Spain</button>
+    <button onclick="elegirPais('SE')">Sweden</button>
+    <button onclick="elegirPais('CH')">Switzerland</button>
+    <button onclick="elegirPais('TR')">Turkey</button>
+    <button onclick="elegirPais('UA')">Ukraine</button>
+    <button onclick="elegirPais('GB')">United Kingdom</button>
+
+</div>
