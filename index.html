@@ -52,7 +52,7 @@ body {
     overflow-y: auto;
 }
 
-/* DIPLOMACIA (placeholder) */
+/* DIPLOMACIA */
 #diplomacia {
     position: absolute;
     bottom: 10px;
@@ -61,23 +61,33 @@ body {
     color: white;
     padding: 15px;
 }
+
+/* VENTANA GUERRA */
+#popup {
+    display: none;
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    background: #222;
+    color: white;
+    padding: 20px;
+    border: 2px solid white;
+}
 </style>
 </head>
 
 <body>
 
-<!-- PANTALLA INICIO -->
+<!-- INICIO -->
 <div id="inicio">
-    <img src="start.png" id="startBtn" onclick="iniciarJuego()">
+    <img src="start.jpg" id="startBtn" onclick="iniciarJuego()">
 </div>
 
 <!-- JUEGO -->
 <div id="juego">
 
-    <!-- MAPA SVG -->
     <object id="mapa" type="image/svg+xml" data="europe.svg"></object>
 
-    <!-- MENU -->
     <div id="menu">
         <h3>Choose Country</h3>
 
@@ -89,38 +99,46 @@ body {
         <button onclick="elegirPais('GB')">UK</button>
         <button onclick="elegirPais('UA')">Ukraine</button>
         <button onclick="elegirPais('TR')">Turkey</button>
-
     </div>
 
-    <!-- DIPLOMACIA -->
     <div id="diplomacia">
         Diplomacy (coming soon)
     </div>
 
 </div>
 
+<!-- POPUP GUERRA -->
+<div id="popup">
+    <p>Declare war?</p>
+    <button onclick="cerrarPopup()">Close</button>
+</div>
+
 <script>
 let miPais = null;
 let svgDoc = null;
 
-// INICIAR JUEGO
+// INICIAR
 function iniciarJuego() {
     document.getElementById("inicio").style.display = "none";
     document.getElementById("juego").style.display = "block";
 }
 
-// CUANDO CARGA EL SVG
+// CARGA SVG
 document.getElementById("mapa").addEventListener("load", function() {
     svgDoc = this.contentDocument;
 
-    // activar clicks en países
     const paises = svgDoc.querySelectorAll("path");
 
     paises.forEach(pais => {
         pais.addEventListener("click", function() {
-            if (miPais) {
-                this.style.fill = "red"; // conquistar
+
+            if (!miPais) return;
+
+            // si clickeás otro país → popup
+            if (this.id !== miPais) {
+                abrirPopup();
             }
+
         });
     });
 });
@@ -135,6 +153,15 @@ function elegirPais(id) {
     }
 
     console.log("Elegiste:", id);
+}
+
+// POPUP
+function abrirPopup() {
+    document.getElementById("popup").style.display = "block";
+}
+
+function cerrarPopup() {
+    document.getElementById("popup").style.display = "none";
 }
 </script>
 
