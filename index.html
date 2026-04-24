@@ -62,6 +62,32 @@ body {
     padding: 15px;
 }
 
+/* TOPBAR */
+#topbar {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #222;
+    color: white;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#bandera {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+}
+
+#topbar button {
+    padding: 8px;
+    cursor: pointer;
+}
+
 /* VENTANA GUERRA */
 #popup {
     display: none;
@@ -85,6 +111,14 @@ body {
 
 <!-- JUEGO -->
 <div id="juego">
+
+    <!-- TOPBAR -->
+    <div id="topbar">
+        <img id="bandera" src="">
+        <button>Economía</button>
+        <button>Fábricas</button>
+        <button>Ejército</button>
+    </div>
 
     <object id="mapa" type="image/svg+xml" data="europe.svg"></object>
 
@@ -117,6 +151,18 @@ body {
 let miPais = null;
 let svgDoc = null;
 
+// nombres para banderas
+const nombresPaises = {
+    ES: "españa",
+    FR: "francia",
+    DE: "alemania",
+    IT: "italia",
+    PL: "polonia",
+    GB: "reino_unido",
+    UA: "ucrania",
+    TR: "turquia"
+};
+
 // INICIAR
 function iniciarJuego() {
     document.getElementById("inicio").style.display = "none";
@@ -134,7 +180,6 @@ document.getElementById("mapa").addEventListener("load", function() {
 
             if (!miPais) return;
 
-            // si clickeás otro país → popup
             if (this.id !== miPais) {
                 abrirPopup();
             }
@@ -146,6 +191,15 @@ document.getElementById("mapa").addEventListener("load", function() {
 // ELEGIR PAIS
 function elegirPais(id) {
     miPais = id;
+
+    // mostrar topbar
+    document.getElementById("topbar").style.display = "flex";
+
+    // cambiar bandera
+    const nombre = nombresPaises[id];
+    if (nombre) {
+        document.getElementById("bandera").src = nombre + ".jpg";
+    }
 
     console.log("Elegiste:", id);
 }
