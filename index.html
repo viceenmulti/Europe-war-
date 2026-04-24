@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mini Victoria</title>
+
+<style>
+body {
+    margin: 0;
+    background: #111;
+}
+
+svg {
+    width: 100vw;
+    height: 100vh;
+}
+
+path {
+    fill: gray;
+    stroke: black;
+    stroke-width: 2;
+    cursor: pointer;
+}
+
+path:hover {
+    fill: orange;
+}
+</style>
+</head>
+
+<body>
+
+<svg viewBox="0 0 800 600">
+
+    <!-- España -->
+    <path d="M150 400 L250 400 L240 470 L140 470 Z"
+          onclick="clickPais('España', this)" />
+
+    <!-- Francia -->
+    <path d="M260 320 L360 320 L350 400 L250 400 Z"
+          onclick="clickPais('Francia', this)" />
+
+    <!-- Alemania -->
+    <path d="M380 250 L460 250 L450 330 L370 330 Z"
+          onclick="clickPais('Alemania', this)" />
+
+    <!-- Italia -->
+    <path d="M420 350 L460 350 L480 500 L440 500 Z"
+          onclick="clickPais('Italia', this)" />
+
+    <!-- Reino Unido -->
+    <path d="M200 200 L260 200 L250 280 L190 280 Z"
+          onclick="clickPais('Reino Unido', this)" />
+
+</svg>
+
+<script>
+function clickPais(nombre, elemento) {
+    elemento.style.fill = "red";
+    console.log("Seleccionaste " + nombre);
+}
+</script>
+
+</body>
+</html>
