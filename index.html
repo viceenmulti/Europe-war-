@@ -101,7 +101,6 @@ body {
     border: 2px solid white;
 }
 
-/* 🟡 EJÉRCITO VISUAL */
 #ejercitoImg {
     display: none;
     position: absolute;
@@ -128,7 +127,6 @@ body {
         <button onclick="abrirEjercito()">Ejército</button>
     </div>
 
-    <!-- 🟡 EJÉRCITO -->
     <img id="ejercitoImg" src="army.png">
 
     <object id="mapa" type="image/svg+xml" data="europe.svg"></object>
@@ -157,7 +155,7 @@ body {
     <button onclick="sumar('ing',1)">+</button>
 
     <br><br>
-    <button onclick="cerrarEjercito()">Cerrar</button>
+    <button onclick="crearEjercito()">Crear</button>
 </div>
 
 <script>
@@ -195,12 +193,10 @@ document.getElementById("mapa").addEventListener("load", function() {
                 return;
             }
 
-            // 🟢 mover ejército dentro de tu país
             if (this.id === miPais) {
                 moverEjercito(evt);
             }
 
-            // combate
             if (this.id !== miPais) {
                 abrirPopup();
             }
@@ -218,7 +214,9 @@ function elegirPais(id) {
     if (nombre) {
         bandera.src = nombre + ".jpg";
     }
+}
 
+// 🟢 CREAR EJÉRCITO
 function crearEjercito() {
 
     if (!miPais) return;
@@ -236,12 +234,10 @@ function crearEjercito() {
     const screen = pt.matrixTransform(svgDoc.documentElement.getScreenCTM());
 
     const img = document.getElementById("ejercitoImg");
-
     img.style.left = screen.x + "px";
     img.style.top = screen.y + "px";
     img.style.display = "block";
 
-    // cerrar panel automáticamente
     ejercitoPanel.style.display = "none";
 }
 
@@ -258,13 +254,9 @@ function moverEjercito(evt) {
     img.style.top = screen.y + "px";
 }
 
-// ===== EJÉRCITO PANEL =====
+// PANEL
 function abrirEjercito() {
     ejercitoPanel.style.display = "block";
-}
-
-function cerrarEjercito() {
-    ejercitoPanel.style.display = "none";
 }
 
 function sumar(tipo, max) {
@@ -274,7 +266,7 @@ function sumar(tipo, max) {
     }
 }
 
-// ===== COMBATE =====
+// COMBATE
 function calcularFuerza(ej) {
     let base = ej.inf*1 + ej.art*4 + ej.tan*5;
     if (ej.ing > 0) base *= 1.2;
