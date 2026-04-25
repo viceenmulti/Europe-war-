@@ -132,14 +132,10 @@ body {
 
 </div>
 
-<div id="popup">
-    <p>Declare war?</p>
-    <button onclick="cerrarPopup()">Close</button>
-</div>
+<div id="popup"></div>
 
 <!-- PANEL EJERCITO -->
 <div id="ejercitoPanel">
-
     <h3>Army Setup</h3>
 
     <p>Infantería: <span id="inf">0</span> / 4</p>
@@ -156,19 +152,13 @@ body {
 
     <br><br>
     <button onclick="cerrarEjercito()">Cerrar</button>
-
 </div>
 
 <script>
 let miPais = null;
 let svgDoc = null;
 
-let ejercitoData = {
-    inf: 0,
-    art: 0,
-    tan: 0,
-    ing: 0
-};
+let ejercitoData = { inf:0, art:0, tan:0, ing:0 };
 
 const nombresPaises = {
     ES: "españa",
@@ -182,8 +172,8 @@ const nombresPaises = {
 };
 
 function iniciarJuego() {
-    document.getElementById("inicio").style.display = "none";
-    document.getElementById("juego").style.display = "block";
+    inicio.style.display = "none";
+    juego.style.display = "block";
 }
 
 document.getElementById("mapa").addEventListener("load", function() {
@@ -202,7 +192,6 @@ document.getElementById("mapa").addEventListener("load", function() {
             if (this.id !== miPais) {
                 abrirPopup();
             }
-
         });
     });
 });
@@ -210,24 +199,22 @@ document.getElementById("mapa").addEventListener("load", function() {
 function elegirPais(id) {
     miPais = id;
 
-    document.getElementById("mensaje").style.display = "none";
-    document.getElementById("topbar").style.display = "flex";
+    mensaje.style.display = "none";
+    topbar.style.display = "flex";
 
     const nombre = nombresPaises[id];
     if (nombre) {
-        document.getElementById("bandera").src = nombre + ".jpg";
+        bandera.src = nombre + ".jpg";
     }
-
-    console.log("Elegiste:", id);
 }
 
-// EJERCITO
+// ===== EJÉRCITO =====
 function abrirEjercito() {
-    document.getElementById("ejercitoPanel").style.display = "block";
+    ejercitoPanel.style.display = "block";
 }
 
 function cerrarEjercito() {
-    document.getElementById("ejercitoPanel").style.display = "none";
+    ejercitoPanel.style.display = "none";
 }
 
 function sumar(tipo, max) {
@@ -237,13 +224,50 @@ function sumar(tipo, max) {
     }
 }
 
-// POPUP
+// ===== COMBATE =====
+function calcularFuerza(ej) {
+    let base =
+        ej.inf * 1 +
+        ej.art * 4 +
+        ej.tan * 5;
+
+    if (ej.ing > 0) base *= 1.2;
+
+    return Math.floor(base);
+}
+
+function generarEnemigo() {
+    return {
+        inf: Math.floor(Math.random()*5),
+        art: Math.floor(Math.random()*3),
+        tan: Math.floor(Math.random()*3),
+        ing: Math.floor(Math.random()*2)
+    };
+}
+
 function abrirPopup() {
-    document.getElementById("popup").style.display = "block";
+    let enemigo = generarEnemigo();
+
+    let fJugador = calcularFuerza(ejercitoData);
+    let fEnemigo = calcularFuerza(enemigo);
+
+    let resultado = fJugador > fEnemigo ? "Ganaste 😎"
+                   : fJugador < fEnemigo ? "Perdiste 💀"
+                   : "Empate 🤝";
+
+    popup.innerHTML = `
+        <p>Batalla</p>
+        <p>Tu fuerza: ${fJugador}</p>
+        <p>Enemigo: ${fEnemigo}</p>
+        <p>${resultado}</p>
+        <button onclick="cerrarPopup()">Cerrar</button>
+    `;
+
+    popup.style.display = "block";
 }
 
 function cerrarPopup() {
-    document.getElementById("popup").style.display = "none";
+    popup.style.display = "none";
 }
 </script>
 
