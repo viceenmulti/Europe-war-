@@ -82,7 +82,7 @@ body {
     border: 2px solid white;
 }
 
-/* MENSAJE INICIAL */
+/* MENSAJE */
 #mensaje {
     position: absolute;
     top: 20px;
@@ -91,6 +91,18 @@ body {
     background: #222;
     color: white;
     padding: 10px;
+}
+
+/* PANEL EJERCITO */
+#ejercitoPanel {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: 35%;
+    background: #222;
+    color: white;
+    padding: 20px;
+    border: 2px solid white;
 }
 </style>
 </head>
@@ -109,7 +121,7 @@ body {
         <img id="bandera" src="">
         <button>Economía</button>
         <button>Fábricas</button>
-        <button>Ejército</button>
+        <button onclick="abrirEjercito()">Ejército</button>
     </div>
 
     <object id="mapa" type="image/svg+xml" data="europe.svg"></object>
@@ -125,9 +137,38 @@ body {
     <button onclick="cerrarPopup()">Close</button>
 </div>
 
+<!-- PANEL EJERCITO -->
+<div id="ejercitoPanel">
+
+    <h3>Army Setup</h3>
+
+    <p>Infantería: <span id="inf">0</span> / 4</p>
+    <button onclick="sumar('inf',4)">+</button>
+
+    <p>Artillería: <span id="art">0</span> / 2</p>
+    <button onclick="sumar('art',2)">+</button>
+
+    <p>Tanques: <span id="tan">0</span> / 2</p>
+    <button onclick="sumar('tan',2)">+</button>
+
+    <p>Ingeniero: <span id="ing">0</span> / 1</p>
+    <button onclick="sumar('ing',1)">+</button>
+
+    <br><br>
+    <button onclick="cerrarEjercito()">Cerrar</button>
+
+</div>
+
 <script>
 let miPais = null;
 let svgDoc = null;
+
+let ejercitoData = {
+    inf: 0,
+    art: 0,
+    tan: 0,
+    ing: 0
+};
 
 const nombresPaises = {
     ES: "españa",
@@ -153,13 +194,11 @@ document.getElementById("mapa").addEventListener("load", function() {
     paises.forEach(pais => {
         pais.addEventListener("click", function() {
 
-            // 🟢 PRIMER CLICK → elegir país
             if (!miPais) {
                 elegirPais(this.id);
                 return;
             }
 
-            // 🟢 después → popup guerra
             if (this.id !== miPais) {
                 abrirPopup();
             }
@@ -171,13 +210,9 @@ document.getElementById("mapa").addEventListener("load", function() {
 function elegirPais(id) {
     miPais = id;
 
-    // ocultar mensaje inicial
     document.getElementById("mensaje").style.display = "none";
-
-    // mostrar topbar
     document.getElementById("topbar").style.display = "flex";
 
-    // bandera
     const nombre = nombresPaises[id];
     if (nombre) {
         document.getElementById("bandera").src = nombre + ".jpg";
@@ -186,6 +221,23 @@ function elegirPais(id) {
     console.log("Elegiste:", id);
 }
 
+// EJERCITO
+function abrirEjercito() {
+    document.getElementById("ejercitoPanel").style.display = "block";
+}
+
+function cerrarEjercito() {
+    document.getElementById("ejercitoPanel").style.display = "none";
+}
+
+function sumar(tipo, max) {
+    if (ejercitoData[tipo] < max) {
+        ejercitoData[tipo]++;
+        document.getElementById(tipo).innerText = ejercitoData[tipo];
+    }
+}
+
+// POPUP
 function abrirPopup() {
     document.getElementById("popup").style.display = "block";
 }
