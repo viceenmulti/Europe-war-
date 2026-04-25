@@ -45,7 +45,6 @@ body {
     padding: 15px;
 }
 
-/* TOPBAR */
 #topbar {
     display: none;
     position: absolute;
@@ -70,7 +69,6 @@ body {
     cursor: pointer;
 }
 
-/* POPUP */
 #popup {
     display: none;
     position: absolute;
@@ -82,7 +80,6 @@ body {
     border: 2px solid white;
 }
 
-/* MENSAJE */
 #mensaje {
     position: absolute;
     top: 20px;
@@ -93,7 +90,6 @@ body {
     padding: 10px;
 }
 
-/* PANEL EJERCITO */
 #ejercitoPanel {
     display: none;
     position: absolute;
@@ -103,6 +99,14 @@ body {
     color: white;
     padding: 20px;
     border: 2px solid white;
+}
+
+/* 🟡 EJÉRCITO VISUAL */
+#ejercitoImg {
+    display: none;
+    position: absolute;
+    width: 40px;
+    pointer-events: none;
 }
 </style>
 </head>
@@ -124,6 +128,9 @@ body {
         <button onclick="abrirEjercito()">Ejército</button>
     </div>
 
+    <!-- 🟡 EJÉRCITO -->
+    <img id="ejercitoImg" src="army.png">
+
     <object id="mapa" type="image/svg+xml" data="europe.svg"></object>
 
     <div id="diplomacia">
@@ -134,7 +141,6 @@ body {
 
 <div id="popup"></div>
 
-<!-- PANEL EJERCITO -->
 <div id="ejercitoPanel">
     <h3>Army Setup</h3>
 
@@ -182,13 +188,19 @@ document.getElementById("mapa").addEventListener("load", function() {
     const paises = svgDoc.querySelectorAll("path");
 
     paises.forEach(pais => {
-        pais.addEventListener("click", function() {
+        pais.addEventListener("click", function(evt) {
 
             if (!miPais) {
                 elegirPais(this.id);
                 return;
             }
 
+            // 🟢 mover ejército dentro de tu país
+            if (this.id === miPais) {
+                moverEjercito(evt);
+            }
+
+            // combate
             if (this.id !== miPais) {
                 abrirPopup();
             }
@@ -206,9 +218,47 @@ function elegirPais(id) {
     if (nombre) {
         bandera.src = nombre + ".jpg";
     }
+
+function crearEjercito() {
+
+    if (!miPais) return;
+
+    const pais = svgDoc.getElementById(miPais);
+    const bbox = pais.getBBox();
+
+    const x = bbox.x + bbox.width / 2;
+    const y = bbox.y + bbox.height / 2;
+
+    const pt = svgDoc.documentElement.createSVGPoint();
+    pt.x = x;
+    pt.y = y;
+
+    const screen = pt.matrixTransform(svgDoc.documentElement.getScreenCTM());
+
+    const img = document.getElementById("ejercitoImg");
+
+    img.style.left = screen.x + "px";
+    img.style.top = screen.y + "px";
+    img.style.display = "block";
+
+    // cerrar panel automáticamente
+    ejercitoPanel.style.display = "none";
 }
 
-// ===== EJÉRCITO =====
+function moverEjercito(evt) {
+    const pt = svgDoc.documentElement.createSVGPoint();
+    pt.x = evt.clientX;
+    pt.y = evt.clientY;
+
+    const svgP = pt.matrixTransform(svgDoc.documentElement.getScreenCTM().inverse());
+    const screen = svgP.matrixTransform(svgDoc.documentElement.getScreenCTM());
+
+    const img = document.getElementById("ejercitoImg");
+    img.style.left = screen.x + "px";
+    img.style.top = screen.y + "px";
+}
+
+// ===== EJÉRCITO PANEL =====
 function abrirEjercito() {
     ejercitoPanel.style.display = "block";
 }
@@ -226,13 +276,8 @@ function sumar(tipo, max) {
 
 // ===== COMBATE =====
 function calcularFuerza(ej) {
-    let base =
-        ej.inf * 1 +
-        ej.art * 4 +
-        ej.tan * 5;
-
+    let base = ej.inf*1 + ej.art*4 + ej.tan*5;
     if (ej.ing > 0) base *= 1.2;
-
     return Math.floor(base);
 }
 
