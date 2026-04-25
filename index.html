@@ -11,7 +11,6 @@ body {
     font-family: Arial;
 }
 
-/* PANTALLA INICIO */
 #inicio {
     position: absolute;
     width: 100%;
@@ -21,38 +20,22 @@ body {
     align-items: center;
 }
 
-/* BOTON START */
 #startBtn {
     width: 320px;
     height: 120px;
     cursor: pointer;
 }
 
-/* CONTENEDOR JUEGO */
 #juego {
     display: none;
 }
 
-/* MAPA */
 #mapa {
     width: 100vw;
     height: 100vh;
     background: #222;
 }
 
-/* MENU PAISES */
-#menu {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #222;
-    color: white;
-    padding: 10px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-/* DIPLOMACIA */
 #diplomacia {
     position: absolute;
     bottom: 10px;
@@ -87,7 +70,7 @@ body {
     cursor: pointer;
 }
 
-/* VENTANA GUERRA */
+/* POPUP */
 #popup {
     display: none;
     position: absolute;
@@ -98,20 +81,30 @@ body {
     padding: 20px;
     border: 2px solid white;
 }
+
+/* MENSAJE INICIAL */
+#mensaje {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: white;
+    padding: 10px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- INICIO -->
 <div id="inicio">
     <img src="start.jpg" id="startBtn" onclick="iniciarJuego()">
 </div>
 
-<!-- JUEGO -->
 <div id="juego">
 
-    <!-- TOPBAR -->
+    <div id="mensaje">Haz click en un país para empezar</div>
+
     <div id="topbar">
         <img id="bandera" src="">
         <button>Economía</button>
@@ -121,26 +114,12 @@ body {
 
     <object id="mapa" type="image/svg+xml" data="europe.svg"></object>
 
-    <div id="menu">
-        <h3>Choose Country</h3>
-
-        <button onclick="elegirPais('ES')">Spain</button>
-        <button onclick="elegirPais('FR')">France</button>
-        <button onclick="elegirPais('DE')">Germany</button>
-        <button onclick="elegirPais('IT')">Italy</button>
-        <button onclick="elegirPais('PL')">Poland</button>
-        <button onclick="elegirPais('GB')">UK</button>
-        <button onclick="elegirPais('UA')">Ukraine</button>
-        <button onclick="elegirPais('TR')">Turkey</button>
-    </div>
-
     <div id="diplomacia">
         Diplomacy (coming soon)
     </div>
 
 </div>
 
-<!-- POPUP GUERRA -->
 <div id="popup">
     <p>Declare war?</p>
     <button onclick="cerrarPopup()">Close</button>
@@ -150,7 +129,6 @@ body {
 let miPais = null;
 let svgDoc = null;
 
-// nombres para banderas
 const nombresPaises = {
     ES: "españa",
     FR: "francia",
@@ -162,13 +140,11 @@ const nombresPaises = {
     TR: "turquia"
 };
 
-// INICIAR
 function iniciarJuego() {
     document.getElementById("inicio").style.display = "none";
     document.getElementById("juego").style.display = "block";
 }
 
-// CARGA SVG
 document.getElementById("mapa").addEventListener("load", function() {
     svgDoc = this.contentDocument;
 
@@ -177,8 +153,13 @@ document.getElementById("mapa").addEventListener("load", function() {
     paises.forEach(pais => {
         pais.addEventListener("click", function() {
 
-            if (!miPais) return;
+            // 🟢 PRIMER CLICK → elegir país
+            if (!miPais) {
+                elegirPais(this.id);
+                return;
+            }
 
+            // 🟢 después → popup guerra
             if (this.id !== miPais) {
                 abrirPopup();
             }
@@ -187,17 +168,16 @@ document.getElementById("mapa").addEventListener("load", function() {
     });
 });
 
-// ELEGIR PAIS
 function elegirPais(id) {
     miPais = id;
 
-    // 🔥 ocultar menú de países
-    document.getElementById("menu").style.display = "none";
+    // ocultar mensaje inicial
+    document.getElementById("mensaje").style.display = "none";
 
     // mostrar topbar
     document.getElementById("topbar").style.display = "flex";
 
-    // cambiar bandera
+    // bandera
     const nombre = nombresPaises[id];
     if (nombre) {
         document.getElementById("bandera").src = nombre + ".jpg";
@@ -206,7 +186,6 @@ function elegirPais(id) {
     console.log("Elegiste:", id);
 }
 
-// POPUP
 function abrirPopup() {
     document.getElementById("popup").style.display = "block";
 }
